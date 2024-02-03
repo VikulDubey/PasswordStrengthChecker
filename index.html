@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Strength</title>
+    <style>
+        body {
+            background-color: #555;
+        }
+
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+            position: relative;
+        }
+
+        .popUp {
+            position: absolute;
+            top: -5rem;
+            background: #26d730;
+            color: black;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.2rem;
+            transition: top 0.3s;
+        }
+
+        .showPopUp {
+            top: 0;
+        }
+
+        form {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        input[type="password"] {
+            outline: 0;
+            border: 0;
+            padding: 0.6rem 1.2rem;
+            width: 12rem;
+            background: transparent;
+            border: 1px solid white;
+            color: white;
+        }
+
+        .submit {
+            position: absolute;
+            outline: 0;
+            border: 0;
+            background-color: transparent;
+            cursor: pointer;
+            right: 0.5rem;
+            font-size: 1.5rem;
+            height: 100%;
+        }
+
+        .submit i {
+            color: white;
+        }
+
+        .errMsg {
+            position: absolute;
+            display: inline;
+            bottom: -3rem;
+            color: #fff;
+            visibility: hidden;
+            transform: translateX(-100%);
+            transition: transform 0.3s;
+        }
+
+        .show-error {
+            visibility: visible;
+            transform: translateX(0%);
+        }
+    </style>
+    <script src="https://kit.fontawesome.com/f84b24b31a.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="popUp">Kindly Enter a strong Password</div>
+        <form>
+            <input type="password" name="password" id="userPassword">
+            <button class="submit"> <i class="fa-solid fa-circle-chevron-right"></i></button>
+            <p class="errMsg">Your password is <span class="error"></span> </p>
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        const userPassword = document.getElementById("userPassword");
+        const form = document.querySelector("form");
+        const errMsg = document.querySelector('.errMsg');
+        const error = document.querySelector(".error");
+        const popUp = document.querySelector(".popUp")
+
+        function toValidatePasswordStrength() {
+            if (userPassword.value.length <= 3) {
+                error.innerHTML = "Week."
+                errMsg.style.color = "#ff5925";
+                userPassword.style.border = "1px solid #ff5925";
+                errMsg.classList.add("show-error")
+            } else if (userPassword.value.length <= 6) {
+                errMsg.style.color = "yellow";
+                userPassword.style.border = "1px solid yellow";
+                error.innerHTML = "Medium."
+                errMsg.classList.add("show-error")
+            } else if (userPassword.value.length > 6) {
+                errMsg.style.color = "#26d730";
+                userPassword.style.border = "1px solid #26d730";
+                error.innerHTML = "Strong."
+                errMsg.classList.add("show-error")
+            }
+            else {
+                errMsg.classList.remove("show-error")
+            }
+        }
+        userPassword.addEventListener("keyup", toValidatePasswordStrength)
+
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault()
+            if (userPassword.value.length >= 7) {
+                localStorage.setItem("strongPassword", userPassword.value)
+                form.submit()
+            } else {
+                popUp.classList.add("showPopUp");
+                setTimeout(() => {
+                    popUp.classList.remove("showPopUp");
+                }, 3000);
+                e.preventDefault();
+            }
+        })
+    </script>
+</body>
+
+</html>
